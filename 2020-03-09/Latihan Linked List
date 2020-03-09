@@ -1,0 +1,205 @@
+'''
+Buatlah method:
+1. def countNode()
+
+2. def cekData(self, mawar)
+   return true/false
+   
+3. def cariData(self, mawar)
+   return urutanKeBerapa
+   kalau tidak ada outputkan -1
+   
+4. def sisip(self, mawar, dataBaru)
+   masukkan dataBaru setelah data=mawar
+   jika data=mawar tidak ada, insertLast
+   
+5. def deleteNode(self, mawar)
+   hapus data=mawar
+   
+6. Coba simulasikan penjumlahan polinomial
+   menggunakan LinkedList
+'''
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+    
+    def getData(self):
+        return self.data
+    
+    def getNext(self):
+        return self.next
+        
+    def setData(self, newData):
+        self.data = newData
+    
+    def setNext(self, newNext):
+        self.next = newNext
+        
+class LinkedList:
+    def __init__(self):
+        self.head = None
+        
+    def isEmpty(self):
+        return self.head == None
+        
+    def insertFirst(self, data):
+        newNode = Node(data)
+        newNode.setNext(self.head)
+        self.head = newNode
+            
+    def deleteFirst(self):
+        if (not self.isEmpty()):
+            yangKeluar = self.head
+            self.head = self.head.getNext()
+            return yangKeluar
+        
+    def insertLast(self, data):
+        if (self.isEmpty()):
+            self.insertFirst(data)
+        else:
+            p = self.head
+            while (p.getNext() is not None):
+                p = p.getNext()
+            
+            newNode = Node(data)
+            p.setNext(newNode)
+        
+    def deleteLast(self):
+        if (not self.isEmpty()):
+            if (self.head.getNext() is None):
+                yangKeluar = self.head
+                self.head = None
+                return yangKeluar
+            else:
+                p = self.head
+                
+                while ((p.getNext()).getNext() is not None):
+                    p = p.getNext()
+            
+            
+                yangKeluar = p.getNext()
+                p.setNext(None)
+                return yangKeluar
+        
+    def printAll(self):
+        p = self.head
+        while (p is not None):
+            print(p.data)
+            p = p.getNext()
+            
+    # Method tambahan
+    def countNode(self):
+        jumlahNode = 0
+        p = self.head
+        while (p is not None):
+            jumlahNode += 1
+            p = p.getNext()
+        return jumlahNode
+    
+    def cekData(self, dataDicek):
+        p = self.head    
+        while (p is not None):
+            if (p.data is dataDicek):
+                return True
+            p = p.getNext()
+        return False    
+    
+    def cariData(self, dataDicari):
+        posisi = 0
+        p = self.head
+        while (p is not None):
+            posisi += 1
+            if (p.data is dataDicari):
+                return posisi
+            p = p.getNext()
+        return -1
+    
+    def sisip(self, dataSebelum, dataBaru):
+        if (self.isEmpty()):
+            return None
+        else:
+            p = self.head
+            # Berhenti loop ketika sudah menemukan dataSebelum
+            while (p.data is not dataSebelum):
+                p = p.getNext()
+                if (p is None):
+                    self.insertLast(dataBaru)
+                    return True
+            
+            newNode = Node(dataBaru)
+            dataSetelah = p.getNext()
+            p.setNext(newNode)
+            (p.getNext()).setNext(dataSetelah)         
+    
+    def deleteNode(self, dataDihapus):
+        if (self.isEmpty()):
+            return None
+        else:
+            p = self.head
+            # Berhenti loop sebelum menemukan dataDihapus
+            # maka akan didapatkan |data sebelum dataDihapus|
+            # |Data sebelum dataDihapus| dibutuhkan untuk
+            # mengganti data setelah |data sebelum dataDihapus| (yaitu dataDihapus)
+            # dengan data setelah dataDihapus
+            while ((p.getNext()).data is not dataDihapus):
+                p = p.getNext()
+                if (p.getNext() is None):
+                    return False
+            
+            dataSetelah = (p.getNext()).getNext()
+            p.setNext(dataSetelah)
+        
+LL = LinkedList()
+LL.insertFirst(1)
+LL.insertFirst(2)
+LL.insertLast(3)
+LL.deleteFirst()
+
+print("Jumlah node =", LL.countNode())
+print("Isi linked list:")
+LL.printAll()
+
+print("Apakah 1 ada?", LL.cekData(1))
+print("Apakah 2 ada?", LL.cekData(2))
+print("Apakah 3 ada?", LL.cekData(3))
+
+print("Cari posisi 1:", LL.cariData(1))
+print("Cari posisi 2:", LL.cariData(2))
+print("Cari posisi 3:", LL.cariData(3))
+
+LL.sisip(1, 4)
+LL.sisip(3, 5)
+print("Isi linked list:")
+LL.printAll()
+
+LL.sisip(6, 7)
+print("Isi linked list:")
+LL.printAll()
+
+LL.deleteNode(5)
+print("Isi linked list (deleteNode(5)):")
+LL.printAll()
+
+LL.sisip(7, 8)
+LL.insertLast(9)
+print("Isi linked list (sisip(7, 8), insertLast(9)):")
+LL.printAll()
+
+LL.deleteNode(7)
+print("Isi linked list (deleteNode(7)):")
+LL.printAll()
+
+LL.deleteNode(10)
+print("Isi linked list (deleteNode(10)):")
+LL.printAll()
+
+
+print("Cari posisi 9:", LL.cariData(9))
+print("Cari posisi 10:", LL.cariData(10))
+print("Apakah 9 ada?", LL.cekData(9))
+
+LL.deleteNode(9)
+print("Isi linked list (deleteNode(10)):")
+LL.printAll()
