@@ -1,0 +1,130 @@
+class Node:
+    def __init__(self, data):
+        self.left = None;
+        self.right = None;
+        self.data = data # Insert node
+        
+    def insert(self, data):
+        if self.data is not None:
+            if data < self.data:
+                if self.left is None:
+                    self.left = Node(data)
+                else:
+                    self.left.insert(data)
+            elif data > self.data:
+                if self.right is None:
+                    self.right = Node(data)
+                else:
+                    self.right.insert(data)
+        else:
+            # Jika root belum ada data:
+            self.data = data
+    
+    # Print the tree
+    def printTreeInOrder(self):
+        if self.left:
+            self.left.printTreeInOrder()
+        print(self.data)
+        if self.right:
+            self.right.printTreeInOrder()
+    
+    def printTreePreOrder(self):
+        print(self.data)
+        if self.left:
+            self.left.printTreePreOrder()
+        if self.right:
+            self.right.printTreePreOrder()
+    
+    def printTreePostOrder(self):
+        if self.left:
+            self.left.printTreePostOrder()
+        if self.right:
+            self.right.printTreePostOrder()
+        print(self.data)
+
+    # Traversal
+    def inOrderTraversal(self, root): # kiri akar kanan
+        res = []
+        if root is not None:
+            res = self.inOrderTraversal(root.left) # Isi res dengan node-node di kiri
+            res.append(root.data) # Append res dengan node root
+            res = res + self.inOrderTraversal(root.right) # Tambah isi res dengan node-node di kanan
+        return res
+    
+    def preOrderTraversal(self, root): #akar kiri kanan
+        res = []
+        if root is not None:
+            res.append(root.data)
+            res = res + self.preOrderTraversal(root.left)
+            res = res + self.preOrderTraversal(root.right)
+        return res
+    
+    def postOrderTraversal(self, root): #kiri kanan akar
+        res = []
+        if root is not None:
+            res = self.postOrderTraversal(root.left)
+            res = res + self.postOrderTraversal(root.right)
+            res.append(root.data)
+        return res
+
+    # Tugas nomor 5-10:
+    def findMax(self, root):
+        # Nilai max selalu terletak di kanan
+        if root.right is None:
+            return root.data
+        return self.findMax(root.right)
+    
+    def findMin(self, root):
+        # Nilai min selalu terletak di kiri
+        if root.left is None:
+            return root.data
+        return self.findMin(root.left)
+    
+    def cari(self, root, x):
+        # Cek apakah yang dicari
+        if x == root.data:
+            return True
+        # Dikatakan node terakhir jika node tersebut tidak memiliki child
+        elif root.left is None and root.right is None:
+            return False
+        else:        
+            # Telusuri 
+            if x > root.data: # Jika lebih dari, telusuri ke kanan
+                return self.cari(root.right, x)
+            elif x < root.data: # Jika kurang dari, telusuri ke kiri
+                return self.cari(root.left, x)
+    
+    def count(self, root):
+        if root is None:
+            return 0
+        else:
+            # Hitung root + semua node di kiri + semua node di kanan
+            return 1 + self.count(root.left) + self.count(root.right)  
+
+root = Node(27)
+root.insert(14)
+root.insert(35)
+root.insert(10)
+root.insert(19)
+root.insert(31)
+root.insert(42)
+
+print(root.inOrderTraversal(root))
+root.printTreeInOrder()
+
+print(root.preOrderTraversal(root))
+root.printTreePreOrder()
+
+print(root.postOrderTraversal(root))
+root.printTreePostOrder()
+
+print("Nilai tertinggi =", root.findMax(root))
+print("Nilai terendah =", root.findMin(root))
+
+print("Apakah 10 ada?", root.cari(root, 10))
+print("Apakah 19 ada?", root.cari(root, 19))
+print("Apakah 27 ada?", root.cari(root, 27))
+print("Apakah 42 ada?", root.cari(root, 42))
+print("Apakah 100 ada?", root.cari(root, 100))
+
+print("Banyaknya node =", root.count(root))
